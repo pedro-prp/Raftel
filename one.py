@@ -2,37 +2,47 @@ from selenium import webdriver
 import requests
 import os
 
-browser = webdriver.Firefox()
 
-manga_number = 353
+def main():
+    browser = webdriver.Firefox()
 
-browser.get(f'https://onepieceex.net/mangas/leitor/{manga_number}/')
+    manga_number = 353
 
-num_page = browser.find_element_by_xpath('//*[@id="mangapaginas"]')
+    browser.get(f'https://onepieceex.net/mangas/leitor/{manga_number}/')
 
-num_page = num_page.find_elements_by_tag_name("li")
-try:
-    os.mkdir('cap-' + str(manga_number))
+    num_page = browser.find_element_by_xpath('//*[@id="mangapaginas"]')
 
-    for i in range(len(num_page)-1):
-        num_page[i].click()
+    num_page = num_page.find_elements_by_tag_name("li")
+    try:
+        os.mkdir('cap-' + str(manga_number))
 
-        str_src = browser.find_element_by_xpath(
-            '/html/body/div[1]/div[3]/div[4]/a/img'
-        )
+        for i in range(len(num_page)-1):
+            num_page[i].click()
 
-        src = str_src.get_attribute('outerHTML').split('src=')[1].split('"')[1]
+            src_elem = browser.find_element_by_xpath(
+                '/html/body/div[1]/div[3]/div[4]/a/img'
+            )
 
-        ext = src.split('.')[-1]
+            str_src = (
+                src_elem.get_attribute('outerHTML')
+                .split('src=')[1]
+                .split('"')[1]
+            )
 
-        url = f'https://onepieceex.net' + src
+            url = f'https://onepieceex.net' + str_src
+            media = requests.get(url, allow_redirects=True)
 
-        mfile = requests.get(url, allow_redirects=True)
+            ext = str_src.split('.')[-1]
 
-        open(f'./cap-{manga_number}/{i+1}.{ext}', 'wb').write(mfile.content)
+            path = f'./cap-{manga_number}/{i+1}.{ext}'
 
-except Exception as err:
-    print(err)
-    print('already downloaded')
+            open(path, 'wb').write(media.content)
 
-browser.close()
+    except Exception:
+        print('already downloaded')
+
+    browser.close()
+
+
+if __name__ == '__main__':
+    main()
