@@ -1,13 +1,16 @@
 from selenium.webdriver.firefox.options import Options
 from selenium import webdriver
+import argparse
 import requests
 import os
 
 
 def main():
-    browser = build_browser()
+    args = build_args()
 
-    manga_number = 353
+    manga_number = vars(args)['chapter_number']
+
+    browser = build_browser()
 
     browser.get(f'https://onepieceex.net/mangas/leitor/{manga_number}/')
 
@@ -42,6 +45,20 @@ def build_browser():
     browser = webdriver.Firefox(options=options)
 
     return browser
+
+
+def build_args():
+    args = argparse.ArgumentParser()
+
+    args.add_argument('-c',
+                      '--chapter',
+                      action='store',
+                      type=int,
+                      dest='chapter_number')
+
+    args = args.parse_args()
+
+    return args
 
 
 def build_img_src(browser):
