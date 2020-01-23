@@ -1,40 +1,32 @@
+from selenium.webdriver.firefox.options import Options
 from selenium import webdriver
 import requests
 import os
 
 
 def main():
-    browser = webdriver.Firefox()
+    browser = build_browser()
 
     manga_number = 353
 
     browser.get(f'https://onepieceex.net/mangas/leitor/{manga_number}/')
 
-    num_page = browser.find_element_by_xpath('//*[@id="mangapaginas"]')
+    pages = browser.find_element_by_xpath('//*[@id="mangapaginas"]')
+    pages = pages.find_elements_by_tag_name("li")
 
-    num_page = num_page.find_elements_by_tag_name("li")
     try:
         os.mkdir('cap-' + str(manga_number))
 
-        for i in range(len(num_page)-1):
-            num_page[i].click()
+        for i in range(len(pages)-1):
+            pages[i].click()
 
-            src_elem = browser.find_element_by_xpath(
-                '/html/body/div[1]/div[3]/div[4]/a/img'
-            )
+            src = build_img_src(browser)
 
-            str_src = (
-                src_elem.get_attribute('outerHTML')
-                .split('src=')[1]
-                .split('"')[1]
-            )
+            url = f'https://onepieceex.net' + src
 
-            url = f'https://onepieceex.net' + str_src
+            path = build_path(src, manga_number, i)
+
             media = requests.get(url, allow_redirects=True)
-
-            ext = str_src.split('.')[-1]
-
-            path = f'./cap-{manga_number}/{i+1}.{ext}'
 
             open(path, 'wb').write(media.content)
 
@@ -42,6 +34,34 @@ def main():
         print('already downloaded')
 
     browser.close()
+
+
+def build_browser():
+    options = Options()
+    options.headless = True
+    browser = webdriver.Firefox(options=options)
+
+    return browser
+
+
+def build_img_src(browser):
+    src_elem = browser.find_element_by_xpath(
+                '/html/body/div[1]/div[3]/div[4]/a/img'
+    )
+
+    str_src = src_elem.get_attribute('outerHTML')
+
+    str_src = str_src.split('src=')[1].split('"')[1]
+
+    return str_src
+
+
+def build_path(str_src, manga_number, i):
+    ext = str_src.split('.')[-1]
+
+    path = f'./cap-{manga_number}/{i+1}.{ext}'
+
+    return path
 
 
 if __name__ == '__main__':
