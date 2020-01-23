@@ -12,7 +12,9 @@ def main():
     browser = build_browser()
 
     if args['all']:
-        download_all(browser)
+        last_chapter = get_last_chapter_number(browser)
+
+        download_all(browser, last_chapter)
     elif args['interval']:
         download_in_interval(
             browser,
@@ -36,8 +38,8 @@ def build_browser():
     return browser
 
 
-def download_all(browser):
-    for i in range(1, 4):
+def download_all(browser, last_chapter):
+    for i in range(1, (last_chapter+1)):
         download_one(browser, i)
 
 
@@ -103,6 +105,18 @@ def build_args():
     args = args.parse_args()
 
     return vars(args)
+
+
+def get_last_chapter_number(browser):
+    browser.get('https://onepieceex.net/mangas/')
+
+    vol_elem = browser.find_element_by_xpath('//*[@id="volumes"]')
+    vol_list = vol_elem.find_elements_by_tag_name("li")
+    vol_last_number = vol_list[-1].get_attribute('outerHTML')
+
+    vol_last_number = vol_last_number.split('span>')[1].split('.')[0]
+
+    return int(vol_last_number)
 
 
 def build_img_src(browser):
