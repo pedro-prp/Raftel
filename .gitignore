@@ -1,0 +1,4 @@
+.vscode
+.env
+cap-*
+gecko*.log

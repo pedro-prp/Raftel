@@ -4,7 +4,7 @@ import os
 
 browser = webdriver.Firefox()
 
-manga_number = 353
+manga_number = 1
 
 browser.get(f'https://onepieceex.net/mangas/leitor/{manga_number}/')
 
