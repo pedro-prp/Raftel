@@ -11,10 +11,16 @@ def main():
 
     browser = build_browser()
 
-    if vars(args)['all']:
+    if args['all']:
         download_all(browser)
+    elif args['interval']:
+        download_in_interval(
+            browser,
+            args['interval'][0],
+            args['interval'][1]
+        )
     else:
-        chapter = vars(args)['chapter_number']
+        chapter = args['chapter_number']
 
         download_one(browser, chapter)
 
@@ -32,6 +38,11 @@ def build_browser():
 
 def download_all(browser):
     for i in range(1, 4):
+        download_one(browser, i)
+
+
+def download_in_interval(browser, min, max):
+    for i in range(min, (max+1)):
         download_one(browser, i)
 
 
@@ -62,6 +73,7 @@ def download_one(browser, chapter):
 
             open(path, 'wb').write(media.content)
 
+        sys.stdout.flush()
         print('')
 
     except Exception:
@@ -81,9 +93,16 @@ def build_args():
                       '--all',
                       action='store_true')
 
+    args.add_argument('-i',
+                      '--interval',
+                      nargs=2,
+                      type=int,
+                      action='store',
+                      dest='interval')
+
     args = args.parse_args()
 
-    return args
+    return vars(args)
 
 
 def build_img_src(browser):
