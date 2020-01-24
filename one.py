@@ -74,6 +74,7 @@ def build_args() -> argparse.Namespace:
 def build_browser():
     options = Options()
     options.headless = True
+    options.set_preference('dom.webnotifications.enabled', False)
     browser = webdriver.Firefox(options=options)
 
     return browser
