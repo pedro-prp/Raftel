@@ -3,3 +3,7 @@
 cap-*
 gecko*.log
 chapters
+cap*
+geck*
+.env
+.vscode
