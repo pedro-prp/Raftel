@@ -1,4 +1,4 @@
-<img style="position: ; opacity: 0.12" src=https://pm1.narvii.com/6194/734f82bdfd2c5e4efeababcb3ef73ccd696bc4bc_hq.jpg>
+<img style="opacity: 0.12" src=https://pm1.narvii.com/6194/734f82bdfd2c5e4efeababcb3ef73ccd696bc4bc_hq.jpg>
 </img>
 
 <h1>Raftel</h1>
