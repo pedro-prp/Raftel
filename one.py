@@ -71,6 +71,9 @@ def build_args() -> argparse.Namespace:
                         type=int,
                         action='store',
                         dest='interval')
+    parser.add_argument('-l',
+                        action='store_true',
+                        dest='last_chapter')
 
     return parser.parse_args()
 
@@ -144,5 +147,9 @@ if __name__ == '__main__':
     elif args.chapter_number:
         logging.info(f'Downloading chapter {args.chapter_number}')
         download_chapter(browser, args.chapter_number)
+    elif args.last_chapter:
+        logging.info('Downloading last chapter')
+        last = get_last_chapter(browser)
+        download_chapter(browser, last)
 
     browser.close()
