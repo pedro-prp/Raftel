@@ -1,0 +1,11 @@
+version: "3.3"
+
+services:
+  server:
+    image: nginx:stable
+    container_name: raftel-server
+    ports:
+      - 8085:80
+    volumes:
+      - ./nginx:/etc/nginx:ro
+      - ./chapters:/www/data/chapters:ro
