@@ -8,18 +8,24 @@
 
 <h4>Baixar um capítulo em específico</h4>
 
-```
-python -c {numero do capítulo} 
+```shell
+python one -c {numero do capítulo} 
 ```
 
 <h4>Baixar todos os capítulos até o mais atual</h4>
 
-```
+```shell
 python one.py -a 
 ```
 
 <h4>Baixar todos os capítulos num intervalo especificado</h4>
 
-```
+```shell
 python one.py -i {primeiro} {ultimo} 
+```
+
+<h4>Baixar o último capítulo lançado</h4>
+
+```shell
+python one.py -l
 ```
